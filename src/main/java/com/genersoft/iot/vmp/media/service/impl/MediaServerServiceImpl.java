@@ -633,13 +633,13 @@ public class MediaServerServiceImpl implements IMediaServerService {
     }
 
     @Override
-    public void getSnap(MediaServer mediaServer, String streamUrl, int timeoutSec, int expireSec, String path, String fileName) {
+    public void getSnap(MediaServer mediaServer, String app, String stream, int timeoutSec, int expireSec, String path, String fileName) {
         IMediaNodeServerService mediaNodeServerService = nodeServerServiceMap.get(mediaServer.getType());
         if (mediaNodeServerService == null) {
             logger.info("[getSnap] 失败, mediaServer的类型： {}，未找到对应的实现类", mediaServer.getType());
             return;
         }
-        mediaNodeServerService.getSnap(mediaServer, streamUrl, timeoutSec, expireSec, path, fileName);
+        mediaNodeServerService.getSnap(mediaServer, app, stream, timeoutSec, expireSec, path, fileName);
     }
 
     @Override
@@ -763,7 +763,7 @@ public class MediaServerServiceImpl implements IMediaServerService {
             calld = streamAuthorityInfo.getCallId();
         }
         List<StreamInfo> streamInfoList = getMediaList(mediaInfo, app, stream, calld);
-        if (streamInfoList.isEmpty()) {
+        if (streamInfoList == null || streamInfoList.isEmpty()) {
             return null;
         }else {
             return streamInfoList.get(0);
